@@ -157,9 +157,9 @@ Oxford, OH 45056
 mark.mcbride@miamioh.edu  
 http://memcbride.net/
 
-Last updated:  January 2, 2014
+Last updated:  November 16, 2019
 
-Material created by Mark E. McBride is copyright 2008-2014
+Material created by Mark E. McBride is copyright 2008-2019
 
 ![CC BY-NC-SA 3.0](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png)
 
