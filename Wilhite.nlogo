@@ -1,6 +1,6 @@
-;; Implements Bilateral Exchange in a Samll World based on the article 
+;; Implements Bilateral Exchange in a Samll World based on the article
 ;; by Wilhilte (2001).  The code implements the four network models
-;; described in Wilhite and used the Netlogo Distribution Model - 
+;; described in Wilhite and used the Netlogo Distribution Model -
 ;; Small Worlds - as a starting point for coding.  See Netlogo
 ;; copyright at the end of the code for permission to use their
 ;; code.
@@ -39,7 +39,7 @@ globals
   total-searches                       ;; total searches undertaken in current run
   total-trades                         ;; total trades undertaken in current run
   round-trades                         ;; total trades undertaken in current round
-  avg-price                            ;; current average global price 
+  avg-price                            ;; current average global price
   std-price                            ;; standard deviation of global price
   old-avg-price                        ;; previous period average price
   debug                                ;; debug flag, set only via command window
@@ -63,10 +63,10 @@ to setup
   set debug false
   set-default-shape turtles "circle"
   make-turtles
-  
+
   ;; wire the groups together
   wire-groups
-  
+
   ;; setup warnings
   if ( (network != "global") and (num-groups = 1) ) [
     user-message (word "Number of groups must be greater than 1 for a " network " network")
@@ -78,7 +78,7 @@ to setup
   if ( (network != "global") and (num-groups = 1) ) [
     set network "global"
   ]
-  ;; setup additional connections if required 
+  ;; setup additional connections if required
   ;; by the specific network structure
   ifelse (network = "locally connected") [
     local-connect
@@ -94,10 +94,10 @@ to setup
 
   ;; establish their initial endowments, utility levels, and mrs'
   initial-endowments
-  
+
   ;; report network characteristics (cc and apl)
   let connected? do-calculations
-  
+
   ;; reset counters
   set total-searches 0
   set total-trades 0
@@ -105,14 +105,14 @@ to setup
   set group-price array:from-list n-values num-groups [0]
   set avg-price 0
   set old-avg-price 0
-  
+
   ;; reset-ticks
   reset-ticks
 end
 
 to make-turtles
   let group-size num-agents / num-groups
-  crt num-agents [ 
+  crt num-agents [
     set group int (who / group-size )
     if (debug) [show (word "who= " who " group=" group)]
     set color gray + ( group * 10 )
@@ -133,7 +133,7 @@ end
 to initial-endowments
   ask turtles [
     ;; pick random quantities of g1 and g2
-    ;; Wilhite used the C++ code (rand % 1490) + 10 
+    ;; Wilhite used the C++ code (rand % 1490) + 10
     ;; which gives an initial endowment between 10 and num-agents*1500
     ;; Because of the considerably smaller number of agents in
     ;; this model (<100 versus 500), we set the endowments considerably
@@ -149,7 +149,7 @@ to initial-endowments
   set market-g2 sum [g2] of turtles
   ;; set predicted market equilibirum
   set market-price market-g2 / market-g1
-    
+
 end
 
 ;;;;;;;;;;;;;;;;;;;;;;;
@@ -192,8 +192,8 @@ to do-trades
       show (word "Neighbor's and their mrs'")
     ]
     ;; see what trading partners look like
-    foreach sort-by [[mrs] of ?1 > [mrs] of ?2] link-neighbors [
-      ask ? [
+    foreach sort-by [ [?1 ?2] -> [mrs] of ?1 > [mrs] of ?2 ] link-neighbors [ ?1 ->
+      ask ?1 [
         set price-ij ( ([g2] of agenti + g2) / ([g1] of agenti + g1) )
         if (debug) [show (word "has g1=" g1 " g2=" g2 " price=" price-ij " mrs=" mrs) ]
         set total-searches total-searches + 1
@@ -322,7 +322,7 @@ to update-prices
 end
 
 to-report converged
-  ifelse ( round-trades = 0) 
+  ifelse ( round-trades = 0)
   [report true]
   [report false]
 end
@@ -566,7 +566,7 @@ end
 
 ;; Wilhite creates the locally connected network by
 ;; having each group share a trader.  When arranged
-;; in a ring, the first agent in a group also become 
+;; in a ring, the first agent in a group also become
 ;; part of the previous group.  The first agent (who=0)
 ;; then becomes part of the last group in the ring.
 to local-connect
@@ -587,7 +587,7 @@ end
 ;; Wilhite creates the small world by adding crossover agents
 ;; to the local-connect network.  There are two restrictions.
 ;; First, a crossover agent cannot be an agent that already links
-;; neighboring groups.  Second, the crossover agent cannot link 
+;; neighboring groups.  Second, the crossover agent cannot link
 ;; two groups who already have a common trader (which would include
 ;; the common traders from the local-connect world and from any
 ;; previosuly created crossovers.
@@ -598,7 +598,7 @@ to small-world
   if (num-crossovers > 0) [
     repeat num-crossovers [
       ;; randomly pick a turtle who is not a common trader in local-connect world
-      let agent1 one-of turtles with [ 
+      let agent1 one-of turtles with [
         (self != min-one-of turtles with [group = [group] of self ] [who]) or
         (not any? link-neighbors with [group != [group] of self])
       ]
@@ -655,13 +655,17 @@ end
 
 ;; Revision History
 ;;
+;; November 16, 2019
+;;
+;; Updated model to work in Netlogo 6.1.1
+;;
 ;; January 2, 2014
 ;;
 ;; Updated model to work in Netlogo 5.0.5
 
 ; Copyright notice for material created by Uri Wilensky
 
-; The Netlogo Distribution Model:  Small Worlds was used as a starting point for this model.  
+; The Netlogo Distribution Model:  Small Worlds was used as a starting point for this model.
 ; The procedures:  do-calculations, do-highlight, find-clustering-coefficient, find-path-lengths,
 ; highlight, in-neighborhood?, and wire-groups were retained, as is, from that model.  Here
 ; is the Netlogo Model Copyright covering there use herein:
@@ -694,10 +698,10 @@ end
 GRAPHICS-WINDOW
 331
 10
-691
-391
-17
-17
+689
+369
+-1
+-1
 10.0
 1
 10
@@ -727,7 +731,7 @@ num-agents
 num-agents
 10
 100
-50
+50.0
 10
 1
 NIL
@@ -759,7 +763,7 @@ num-groups
 num-groups
 1
 10
-1
+8.0
 1
 1
 NIL
@@ -774,7 +778,7 @@ endowment-per-good-agent
 endowment-per-good-agent
 1000
 20000
-1000
+4000.0
 1000
 1
 NIL
@@ -864,7 +868,7 @@ CHOOSER
 network
 network
 "global" "locally disconnected" "locally connected" "small world"
-0
+3
 
 MONITOR
 477
@@ -1028,7 +1032,7 @@ num-crossovers
 num-crossovers
 0
 5
-2
+2.0
 1
 1
 NIL
@@ -1194,9 +1198,9 @@ Oxford, OH 45056
 mark.mcbride@miamioh.edu  
 http://memcbride.net/
 
-Last updated:  January 2, 2014
+Last updated:  November 16, 2019
 
-Material created by Mark E. McBride is copyright 2008-2014
+Material created by Mark E. McBride is copyright 2008-2019
 
 ![CC BY-NC-SA 3.0](http://i.creativecommons.org/l/by-nc-sa/3.0/88x31.png)
 
@@ -1485,9 +1489,8 @@ false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
-
 @#$#@#$#@
-NetLogo 5.0.5
+NetLogo 6.1.1
 @#$#@#$#@
 setup
 repeat 5 [rewire-one]
@@ -1505,7 +1508,6 @@ true
 0
 Line -7500403 true 150 150 30 225
 Line -7500403 true 150 150 270 225
-
 @#$#@#$#@
 0
 @#$#@#$#@
